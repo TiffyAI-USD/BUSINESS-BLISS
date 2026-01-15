@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>🚀 Entering TiffyAI Business Tools</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+#splash {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+#splash img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
+
+/* Unified Overlay */
+#switchOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  color: white;
+  display: none;
+  z-index: 5;
+  text-align: center;
+  padding: 24px;
+}
+
+#switchOverlay h2 {
+  margin-top: 22vh;
+  font-size: 22px;
+}
+
+#switchOverlay p {
+  opacity: 0.85;
+  font-size: 16px;
+}
+
+#openBtn {
+  margin-top: 28px;
+  padding: 14px 22px;
+  background: white;
+  color: black;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 10px;
+  display: inline-block;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Splash -->
+<div id="splash">
+  <img src="https://tiffyai-usd.github.io/Web-Store-App/tools33.gif" alt="Entering" />
+</div>
+
+<!-- Unified Escape Overlay -->
+<div id="switchOverlay">
+  <h2>Open Full Experience</h2>
+  <p>This app needs your device’s browser<br>to work without limitations.</p>
+
+  <!-- USER TAP = GUARANTEED ESCAPE -->
+  <a
+    id="openBtn"
+    href="https://tiffyai-usd.github.io/Web-Store-App/v6.html"
+    target="_blank"
+    rel="noopener"
+  >
+    Open in Browser
+  </a>
+
+  <p style="margin-top:18px;font-size:14px;opacity:.7">
+    If prompted, choose your default browser
+  </p>
+</div>
+
+<script>
+const TARGET = "https://tiffyai-usd.github.io/Web-Store-App/v6.html";
+
+/* ---------- Helpers ---------- */
+
+function isAndroid() {
+  return /Android/i.test(navigator.userAgent);
+}
+
+function isIOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+function isLinkedIn() {
+  return /LinkedInApp/i.test(navigator.userAgent);
+}
+
+function isInApp() {
+  return /FBAN|FBAV|Instagram|TikTok|Twitter|Snapchat|Line|LinkedInApp/i.test(navigator.userAgent);
+}
+
+function escapedBefore() {
+  return document.cookie.includes("escaped=true");
+}
+
+function markEscaped() {
+  document.cookie = "escaped=true; path=/; max-age=31536000";
+}
+
+/* ---------- Android Intent ---------- */
+
+function openDefaultBrowserAndroid(url) {
+  const clean = url.replace(/^https?:\/\//, '');
+  const intent =
+    `intent://${clean}` +
+    `#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+
+  window.location.href = intent;
+
+  setTimeout(() => {
+    window.location.href = url;
+  }, 1200);
+}
+
+/* ---------- Main ---------- */
+
+window.onload = () => {
+
+  if (escapedBefore()) {
+    window.location.replace(TARGET);
+    return;
+  }
+
+  setTimeout(() => {
+
+    // LINKEDIN OR IOS IN-APP → USER TAP ONLY
+    if (isLinkedIn() || (isIOS() && isInApp())) {
+      document.getElementById("switchOverlay").style.display = "block";
+      return;
+    }
+
+    // ANDROID IN-APP (NOT LINKEDIN) → AUTO ESCAPE
+    if (isAndroid() && isInApp()) {
+      openDefaultBrowserAndroid(TARGET);
+      return;
+    }
+
+    // NORMAL BROWSER
+    markEscaped();
+    window.location.replace(TARGET);
+
+  }, 2500);
+};
+</script>
+
+</body>
+</html>
