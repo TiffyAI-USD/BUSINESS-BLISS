@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>🚀 Entering TiffyAI Business Tools</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+}
+
+#splash {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+#splash img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
+
+#iosOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  color: white;
+  display: none;
+  z-index: 10;
+  padding: 24px;
+  text-align: center;
+}
+
+#iosOverlay h2 {
+  margin-top: 20vh;
+  font-size: 22px;
+}
+
+#iosOverlay p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+#iosOverlay .hint {
+  margin-top: 20px;
+  font-size: 15px;
+  opacity: 0.8;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Splash -->
+<div id="splash">
+  <img src="https://tiffyai-usd.github.io/Web-Store-App/tools33.gif" alt="Entering" />
+</div>
+
+<!-- iOS Overlay -->
+<div id="iosOverlay">
+  <h2>Open in Safari</h2>
+  <p>This app needs a full browser to work properly.</p>
+  <div class="hint">
+    Tap <strong>⋮</strong> or <strong>Share</strong><br>
+    then choose <strong>“Open in Browser”</strong>
+  </div>
+</div>
+
+<script>
+const TARGET_URL = "https://tiffyai-usd.github.io/Web-Store-App/v6.html";
+
+/* ---------- Helpers ---------- */
+
+function getCookie(name) {
+  return document.cookie.split('; ').find(r => r.startsWith(name + '='))?.split('=')[1];
+}
+
+function setEscaped() {
+  document.cookie = "escaped=true; path=/; max-age=31536000";
+}
+
+function isAndroid() {
+  return /Android/i.test(navigator.userAgent);
+}
+
+function isIOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+function isInAppBrowser() {
+  return /FBAN|FBAV|Instagram|Line|TikTok|Twitter|Snapchat/i.test(navigator.userAgent);
+}
+
+/* ---------- Android Escape ---------- */
+
+function openDefaultBrowserAndroid(url) {
+  const clean = url.replace(/^https?:\/\//, '');
+  const intent =
+    `intent://${clean}` +
+    `#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+
+  window.location.href = intent;
+
+  setTimeout(() => {
+    window.location.href = url;
+  }, 1200);
+}
+
+/* ---------- Main Logic ---------- */
+
+window.onload = () => {
+
+  // Already escaped before
+  if (getCookie("escaped") === "true") {
+    window.location.replace(TARGET_URL);
+    return;
+  }
+
+  setTimeout(() => {
+
+    // ANDROID + IN-APP → FORCE DEFAULT BROWSER
+    if (isAndroid() && isInAppBrowser()) {
+      openDefaultBrowserAndroid(TARGET_URL);
+      return;
+    }
+
+    // IOS + IN-APP → SHOW OVERLAY
+    if (isIOS() && isInAppBrowser()) {
+      document.getElementById("iosOverlay").style.display = "block";
+      return;
+    }
+
+    // NORMAL BROWSER
+    setEscaped();
+    window.location.replace(TARGET_URL);
+
+  }, 2500);
+};
+</script>
+
+</body>
+</html>
